@@ -2,7 +2,7 @@ const ContactsRepository = require('../repositories/ContactsRepository');
 
 class ContactController {
   async index(request, response) {
-    // listar todos os registros
+    // lists all contacts
     const { orderBy } = request.query;
     const contacts = await ContactsRepository.findAll(orderBy);
 
@@ -10,21 +10,21 @@ class ContactController {
   }
 
   async show(request, response) {
-    // obter UM registro
+    // obtain a contact
     const { id } = request.params;
 
     const contact = await ContactsRepository.findById(id);
 
     if (!contact) {
       // 404: Not found
-      return response.status(404).json({ error: 'User not found' });
+      return response.status(404).json({ error: 'Contact not found' });
     }
 
     response.json(contact);
   }
 
   async store(request, response) {
-    // criar novo registro
+    // register new contact
     const {
       name, email, phone, category_id,
     } = request.body;
@@ -42,11 +42,11 @@ class ContactController {
       name, email, phone, category_id,
     });
 
-    response.json(contact);
+    response.status(201).json(contact);
   }
 
   async update(request, response) {
-    // editar um registro
+    // edit a contact
     const { id } = request.params;
     const {
       name, email, phone, category_id,
@@ -54,7 +54,7 @@ class ContactController {
 
     const contactExists = await ContactsRepository.findById(id);
     if (!contactExists) {
-      return response.status(404).json({ error: 'User not found' });
+      return response.status(404).json({ error: 'Contact not found' });
     }
 
     if (!name) {
@@ -74,7 +74,7 @@ class ContactController {
   }
 
   async delete(request, response) {
-    // deletar um registro
+    // delete a contact
     const { id } = request.params;
 
     await ContactsRepository.delete(id);
