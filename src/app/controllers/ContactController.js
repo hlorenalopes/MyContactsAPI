@@ -104,6 +104,10 @@ class ContactController {
     // delete a contact
     const { id } = request.params;
 
+    if (!isValidUUID(id)) {
+      return response.status(400).json({ error: 'Invalid user id' });
+    }
+
     await ContactsRepository.delete(id);
     // 204: No content
     response.sendStatus(204);
